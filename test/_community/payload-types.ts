@@ -12,7 +12,7 @@ export interface Config {
   };
   collections: {
     posts: Post;
-    media: Media;
+    contacts: Contact;
     users: User;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -21,7 +21,7 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     posts: PostsSelect<false> | PostsSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
+    contacts: ContactsSelect<false> | ContactsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -30,12 +30,8 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  globals: {
-    menu: Menu;
-  };
-  globalsSelect: {
-    menu: MenuSelect<false> | MenuSelect<true>;
-  };
+  globals: {};
+  globalsSelect: {};
   locale: null;
   user: User & {
     collection: 'users';
@@ -76,47 +72,13 @@ export interface Post {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
+ * via the `definition` "contacts".
  */
-export interface Media {
+export interface Contact {
   id: string;
+  title?: string | null;
   updatedAt: string;
   createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
-  sizes?: {
-    thumbnail?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    medium?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-    large?: {
-      url?: string | null;
-      width?: number | null;
-      height?: number | null;
-      mimeType?: string | null;
-      filesize?: number | null;
-      filename?: string | null;
-    };
-  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -147,8 +109,8 @@ export interface PayloadLockedDocument {
         value: string | Post;
       } | null)
     | ({
-        relationTo: 'media';
-        value: string | Media;
+        relationTo: 'contacts';
+        value: string | Contact;
       } | null)
     | ({
         relationTo: 'users';
@@ -208,54 +170,12 @@ export interface PostsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
+ * via the `definition` "contacts_select".
  */
-export interface MediaSelect<T extends boolean = true> {
+export interface ContactsSelect<T extends boolean = true> {
+  title?: T;
   updatedAt?: T;
   createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
-  sizes?:
-    | T
-    | {
-        thumbnail?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        medium?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-        large?:
-          | T
-          | {
-              url?: T;
-              width?: T;
-              height?: T;
-              mimeType?: T;
-              filesize?: T;
-              filename?: T;
-            };
-      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -303,26 +223,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "menu".
- */
-export interface Menu {
-  id: string;
-  globalText?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "menu_select".
- */
-export interface MenuSelect<T extends boolean = true> {
-  globalText?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
