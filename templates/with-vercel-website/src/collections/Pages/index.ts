@@ -11,7 +11,7 @@ import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
 import { generatePreviewPath } from '../../utilities/generatePreviewPath'
-import { revalidatePage } from './hooks/revalidatePage'
+import { revalidateDelete, revalidatePage } from './hooks/revalidatePage'
 
 import {
   MetaDescriptionField,
@@ -20,7 +20,6 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { getServerSideURL } from '@/utilities/getURL'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -46,17 +45,15 @@ export const Pages: CollectionConfig<'pages'> = {
           collection: 'pages',
         })
 
-        return `${getServerSideURL()}${path}`
+        return path
       },
     },
-    preview: (data) => {
-      const path = generatePreviewPath({
+    preview: (data, { req }) =>
+      generatePreviewPath({
         slug: typeof data?.slug === 'string' ? data.slug : '',
         collection: 'pages',
-      })
-
-      return `${getServerSideURL()}${path}`
-    },
+        req,
+      }),
     useAsTitle: 'title',
   },
   fields: [
@@ -79,6 +76,9 @@ export const Pages: CollectionConfig<'pages'> = {
               type: 'blocks',
               blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
               required: true,
+              admin: {
+                initCollapsed: true,
+              },
             },
           ],
           label: 'Content',
@@ -124,6 +124,7 @@ export const Pages: CollectionConfig<'pages'> = {
   hooks: {
     afterChange: [revalidatePage],
     beforeChange: [populatePublishedAt],
+    beforeDelete: [revalidateDelete],
   },
   versions: {
     drafts: {
